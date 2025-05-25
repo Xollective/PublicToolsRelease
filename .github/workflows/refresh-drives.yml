@@ -31,6 +31,6 @@ jobs:
         run: Invoke-WebRequest -Uri "https://github.com/Xollective/PublicToolsRelease/releases/download/latest/nexutils.exe" -OutFile nexutils.exe
 
       - name: Run nexutils.exe with secret
-        run: .\nexutils.exe dehydrate --uri "$env:SAS_URL" --refresh-interval ${{ inputs.refresh_interval }} --expiry ${{ inputs.expiry }} ${{ inputs.args }}
+        run: .\nexutils.exe dehydrate --uri "$env:SAS_URL" --refresh-interval ${{ inputs.refresh_interval || '5d' }} --expiry ${{ inputs.expiry || '1h' }} ${{ inputs.args }}
         env:
           SAS_URL: ${{ secrets[matrix.sas_key] }}
