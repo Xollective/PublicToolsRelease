@@ -1,4 +1,4 @@
-name: Run nexutils with multiple secrets
+name: Refresh drives
 
 on:
   schedule:
