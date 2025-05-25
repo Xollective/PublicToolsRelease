@@ -4,7 +4,19 @@ on:
   schedule:
     - cron: "*/30 * * * *"
   workflow_dispatch:
-
+    inputs:
+      expiry:
+        description: "Active time before ghosting content"
+        required: false
+        default: "1h"
+      refresh_interval:
+        description: "Time before refreshing ghosted content"
+        required: false
+        default: "3d"
+      args:
+        description: "Arguments to pass to nexutils.exe"
+        required: false
+        default: ""
 jobs:
   run-nexutils:
     runs-on: windows-latest
@@ -19,6 +31,6 @@ jobs:
         run: Invoke-WebRequest -Uri "https://github.com/Xollective/PublicToolsRelease/releases/download/latest/nexutils.exe" -OutFile nexutils.exe
 
       - name: Run nexutils.exe with secret
-        run: .\nexutils.exe dehydrate --uri "$env:SAS_URL"
+        run: .\nexutils.exe dehydrate --uri "$env:SAS_URL" --refresh-interval ${{ inputs.refresh_interval }} --expiry ${{ inputs.expiry }} ${{ inputs.args }}
         env:
           SAS_URL: ${{ secrets[matrix.sas_key] }}
